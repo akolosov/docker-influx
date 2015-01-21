@@ -1,4 +1,4 @@
-tutum-docker-influxdb
+akolosov-docker-influxdb
 =====================
 InfluxDB image
 
@@ -6,13 +6,13 @@ InfluxDB image
 Usage
 -----
 
-To create the image `tutum/influxdb`, execute the following command on tutum-docker-influxdb folder:
+To create the image `akolosov/influxdb`, execute the following command on akolosov-docker-influxdb folder:
 
-    docker build -t tutum/influxdb .
+    docker build -t akolosov/influxdb .
 
 You can now push new image to the registry:
     
-    docker push tutum/influxdb
+    docker push akolosov/influxdb
 
 
 Running your InfluxDB image
@@ -20,7 +20,7 @@ Running your InfluxDB image
 
 Start your image binding the external ports `8083` and `8086` in all interfaces to your container. Ports `8090` and `8099` are only used for clustering and should not be exposed to the internet.
 
-    docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 tutum/influxdb
+    docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 akolosov/influxdb
 
 
 Configuring your InfluxDB
@@ -33,7 +33,7 @@ Initially Create Database
 -------------------------
 Use `-e PRE_CREATE_DB="db1;db2;db3" to create database named "db1", "db2", and "db3" on the first time the container starts automatically. Each database name is separated by `;`. For example:
 
-```docker run -d -p 8083:8083 -p 8084:8084 -e PRE_CREATE_DB="db1;db2;db3" tutum/influxdb:latest``` 
+```docker run -d -p 8083:8083 -p 8084:8084 -e PRE_CREATE_DB="db1;db2;db3" akolosov/influxdb:latest``` 
 
 SSL SUPPORT
 -----------
@@ -43,13 +43,13 @@ If you provide `SSL_CERT`, system will use user provided ssl certificate. Otherw
 
 The cert file should be an combination of Private Key and Public Certificate. In order to pass it as an environment variable, you need specifically convert `newline` to `\n`(two characters). In order to do this, you can simply run the command `awk 1 ORS='\\n' <your_cert.pem>`. For example:
 
-```docker run -d -p 8083:8083 -p 8084:8084 -e SSL_SUPPORT="True" -e SSL_CERT="`awk 1 ORS='\\n' ~/cert.pem`" tutum/influxdb:latest``` 
+```docker run -d -p 8083:8083 -p 8084:8084 -e SSL_SUPPORT="True" -e SSL_CERT="`awk 1 ORS='\\n' ~/cert.pem`" akolosov/influxdb:latest``` 
 
 UDP SUPPORT
 -----------
 If you provide a `UDP_DB`, influx will open a UDP port (4444 or if provided `UDP_PORT`) for reception of events for the named database.
 
-```docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 --expose 4444 -e UDP_DB="my_db" tutum/influxdb```
+```docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 --expose 4444 -e UDP_DB="my_db" akolosov/influxdb```
 
 Clustering
 ----------
@@ -64,11 +64,11 @@ Example on a single docker host :
 ```
 docker run -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 \
   -e FORCE_HOSTNAME="auto" -e REPLI_FACTOR=2 \
-  -d --name masterinflux tutum/influxdb
+  -d --name masterinflux akolosov/influxdb
 ```
 * then launch one or more "slaves":
 ```
 docker run --link masterinflux:master -p 8083 -p 8086 --expose 8090 --expose 8099 \
   -e SEEDS="master:8090" -e FORCE_HOSTNAME="auto" \
-  -d  tutum/influxdb
+  -d  akolosov/influxdb
 ```

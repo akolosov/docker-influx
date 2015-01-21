@@ -15,24 +15,15 @@ ENV PRE_CREATE_DB **None**
 ENV SSL_SUPPORT **False**
 ENV SSL_CERT **None**
 
-# Admin server
-EXPOSE 8083
-
-# HTTP API
-EXPOSE 8086
-
-# HTTPS API
-EXPOSE 8084
-
-# Raft port (for clustering, don't expose publicly!)
-EXPOSE 8090
-
-# Protobuf port (for clustering, don't expose publicly!)
-EXPOSE 8099
-
-# UDP
-EXPOSE 4444/udp
+EXPOSE 8083 8086 8084 8090 8099 4444/udp
 
 VOLUME ["/data"]
 
-CMD ["/run.sh"]
+RUN mkdir -p /data/logs
+RUN mkdir -p /data/raft
+RUN mkdir -p /data/wal
+RUN mkdir -p /data/db
+
+WORKDIR /data
+
+ENTRYPOINT ["/bin/bash", "/run.sh"]
