@@ -1,5 +1,5 @@
-akolosov-docker-influxdb
-=====================
+docker-influxdb
+===============
 InfluxDB image
 
 
@@ -29,21 +29,17 @@ Open your browse to access `localhost:8083` to configure InfluxDB. Fill the port
 
 Alternatively, you can use RESTful API to talk to InfluxDB on port `8086`
 
-SSL SUPPORT
------------
-By default, Influx DB uses port 8086 for HTTP API. If you want to use SSL API, you can set `SSL_SUPPORT` to `true`  as an environment variable. In that case, you can use HTTP API on port 8086 and HTTPS API on port 8084. Please do not publish port 8086 if you want to only allow HTTPS connection.
+GRAPHITE SUPPORT
+----------------
+If you provide a `GRAPHITE_DB`, influx will open a UDP port 2003 for reception of events for the named database from Graphite.
 
-If you provide `SSL_CERT`, system will use user provided ssl certificate. Otherwise system will create a self-signed certificated, which usually has an unauthorized cerificated problem, not recommend.
-
-The cert file should be an combination of Private Key and Public Certificate. In order to pass it as an environment variable, you need specifically convert `newline` to `\n`(two characters). In order to do this, you can simply run the command `awk 1 ORS='\\n' <your_cert.pem>`. For example:
-
-```docker run -d -p 8083:8083 -p 8084:8084 -e SSL_SUPPORT="True" -e SSL_CERT="`awk 1 ORS='\\n' ~/cert.pem`" akolosov/influxdb:latest``` 
+```docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 --expose 2003 -e GRAPHITE_DB="my_graphite_db" akolosov/influxdb```
 
 UDP SUPPORT
 -----------
-If you provide a `UDP_DB`, influx will open a UDP port (4444 or if provided `UDP_PORT`) for reception of events for the named database.
+If you provide a `UDP_DB`, influx will open a UDP port 4444 for reception of events for the named database.
 
-```docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 --expose 4444 -e UDP_DB="my_db" akolosov/influxdb```
+```docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 --expose 4444 -e UDP_DB="my_udp_db" akolosov/influxdb```
 
 Clustering
 ----------
@@ -56,13 +52,13 @@ Use :
 Example on a single docker host :
 * launch first container :
 ```
-docker run -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 \
+docker run -p 8083:8083 -p 8086:8086 -p 8090:8090 -p 8099:8099 \
   -e FORCE_HOSTNAME="auto" -e REPLI_FACTOR=2 \
   -d --name masterinflux akolosov/influxdb
 ```
 * then launch one or more "slaves":
 ```
-docker run --link masterinflux:master -p 8083 -p 8086 --expose 8090 --expose 8099 \
+docker run --link masterinflux:master -p 8083 -p 8086 -p 8090 -p 8099 \
   -e SEEDS="master:8090" -e FORCE_HOSTNAME="auto" \
   -d  akolosov/influxdb
 ```
