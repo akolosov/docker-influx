@@ -11,7 +11,7 @@ ADD config.toml /config/config.toml
 ADD run.sh /run.sh
 RUN chmod +x /*.sh
 
-EXPOSE 8083 8086 8084 8090 8099 4444/udp 2003/udp
+EXPOSE 8083 8086 8090 8099 4444/udp 2003/udp
 
 VOLUME ["/data"]
 
