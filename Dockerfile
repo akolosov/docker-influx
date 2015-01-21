@@ -1,4 +1,4 @@
-FROM dockerfile/ubuntu
+FROM ubuntu:trusty
 
 # Install InfluxDB
 ENV INFLUXDB_VERSION latest
