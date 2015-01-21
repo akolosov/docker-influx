@@ -29,12 +29,6 @@ Open your browse to access `localhost:8083` to configure InfluxDB. Fill the port
 
 Alternatively, you can use RESTful API to talk to InfluxDB on port `8086`
 
-Initially Create Database
--------------------------
-Use `-e PRE_CREATE_DB="db1;db2;db3" to create database named "db1", "db2", and "db3" on the first time the container starts automatically. Each database name is separated by `;`. For example:
-
-```docker run -d -p 8083:8083 -p 8084:8084 -e PRE_CREATE_DB="db1;db2;db3" akolosov/influxdb:latest``` 
-
 SSL SUPPORT
 -----------
 By default, Influx DB uses port 8086 for HTTP API. If you want to use SSL API, you can set `SSL_SUPPORT` to `true`  as an environment variable. In that case, you can use HTTP API on port 8086 and HTTPS API on port 8084. Please do not publish port 8086 if you want to only allow HTTPS connection.
