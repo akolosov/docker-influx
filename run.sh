@@ -3,6 +3,8 @@
 set -m
 CONFIG_FILE="/config/config.toml"
 
+mkdir -p /data/logs
+
 #Dynamically change the value of 'max-open-shards' to what 'ulimit -n' returns
 sed -i "s/^max-open-shards.*/max-open-shards = $(ulimit -n)/" ${CONFIG_FILE}
 

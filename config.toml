@@ -10,7 +10,7 @@ bind-address = "0.0.0.0"
 [logging]
 # logging level can be one of "debug", "info", "warn" or "error"
 level  = "info"
-file   = "/opt/influxdb/shared/log.txt"         # stdout to log to standard out
+file   = "/data/logs/influxdb.log"         # stdout to log to standard out
 
 # Configure the admin server
 [admin]
@@ -39,7 +39,7 @@ read-timeout = "5s"
 
   [input_plugins.udp]
   enabled = false
-  # port = 4444
+  port = 4444
   # database = ""
 
 # Raft configuration
