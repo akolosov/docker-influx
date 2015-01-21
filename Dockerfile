@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM akolosov/ubuntu
 
 # Install InfluxDB
 ENV INFLUXDB_VERSION latest
