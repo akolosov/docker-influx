@@ -109,7 +109,7 @@ fi
 
 echo "=> Starting InfluxDB ..."
 
-exec /usr/bin/influxdb -config=${CONFIG_FILE}
+/usr/bin/influxdb -config=${CONFIG_FILE}
 
 tail -f /data/logs/influxdb.log
 
