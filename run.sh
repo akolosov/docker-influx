@@ -72,7 +72,5 @@ fi
 
 echo "=> Starting InfluxDB ..."
 
-/usr/bin/influxdb -config=${CONFIG_FILE} &
-
-tail -f /data/logs/influxdb.log
+exec /usr/bin/influxdb -config=${CONFIG_FILE}
 
