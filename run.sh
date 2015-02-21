@@ -38,5 +38,5 @@ fi
 
 echo "=> Starting InfluxDB ..."
 
-exec /usr/bin/influxdb -config=${CONFIG_FILE}
+exec /opt/influxdb/influxd -config=${CONFIG_FILE}
 
