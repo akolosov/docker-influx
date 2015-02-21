@@ -26,17 +26,7 @@ if [ -n "${REPLI_FACTOR}" ]; then
     /usr/bin/perl -p -i -e "s/replication-factor = 1/replication-factor = ${REPLI_FACTOR}/g" ${CONFIG_FILE}
 fi
 
-# Add UDP support
-if [ -n "${UDP_DB}" ]; then
-    sed -i -r -e "/^\s+\[input_plugins.udp\]/, /^$/ { s/false/true/; s/#//g; s/\"\"/\"${UDP_DB}\"/g; }" ${CONFIG_FILE}
-fi
-
-# Add GRAPHITE support
-if [ -n "${GRAPHITE_DB}" ]; then
-    sed -i -r -e "/^\s+\[input_plugins.graphite\]/, /^$/ { s/false/true/; s/#//g; s/\"\"/\"${GRAPHITE_DB}\"/g; }" ${CONFIG_FILE}
-fi
-
 echo "=> Starting InfluxDB ..."
 
-exec /opt/influxdb/influxd -config=${CONFIG_FILE}
+exec /usr/bin/influxdb -config=${CONFIG_FILE}
 
