@@ -1,17 +1,15 @@
-FROM akolosov/ubuntu
+FROM akolosov/busybox
+MAINTAINER Alexey Kolosov <alexey.kolosov@gmail.com>
 
 # Install InfluxDB
-ENV INFLUXDB_VERSION latest
-RUN curl -s -o /tmp/influxdb_latest_amd64.deb https://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB_VERSION}_amd64.deb && \
-  dpkg -i /tmp/influxdb_latest_amd64.deb && \
-  rm /tmp/influxdb_latest_amd64.deb && \
-  rm -rf /var/lib/apt/lists/*
+ENV INFLUXDB_VERSION 0.9.4.2
+ADD  https://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB_VERSION}_x86_64.tar.gz /tmp/influxdb.tar.gz
+RUN  cd /tmp && gunzip -dc influxdb.tar.gz | tar xvf - && \
+	cp influxdb_${INFLUXDB_VERSION}_x86_64/opt/influxdb/versions/${INFLUXDB_VERSION}/influx /bin/influx && \
+	cp influxdb_${INFLUXDB_VERSION}_x86_64/opt/influxdb/versions/${INFLUXDB_VERSION}/influxd /sbin/influxd && \
+	rm -rf influxdb*
 
-ADD config.toml /config/config.toml
-ADD run.sh /run.sh
-RUN chmod +x /*.sh
-
-EXPOSE 8083 8086 8090 8099 2003/udp
+EXPOSE 8083 8086 8088
 
 VOLUME ["/data"]
 
@@ -24,4 +22,12 @@ RUN chmod -R 0777 /data
 
 WORKDIR /data
 
-ENTRYPOINT ["/bin/bash", "/run.sh"]
+# Generate a default config
+RUN /sbin/influxd config > /etc/influxdb.toml
+
+# Use /data for all disk storage
+RUN sed -i 's/dir = "\/.*influxdb/dir = "\/data/' /etc/influxdb.toml
+
+RUN [ -z "$FORCE_HOSTNAME" ] || sed -i "s/hostname = .*/hostname = \"${FORCE_HOSTNAME}\"/g" /etc/influxdb.toml
+
+ENTRYPOINT ["/sbin/influxd", "--config", "/etc/influxdb.toml"]
