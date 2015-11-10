@@ -28,6 +28,4 @@ RUN /sbin/influxd config > /etc/influxdb.toml
 # Use /data for all disk storage
 RUN sed -i 's/dir = "\/.*influxdb/dir = "\/data/' /etc/influxdb.toml
 
-RUN [ -z "$FORCE_HOSTNAME" ] || sed -i "s/hostname = .*/hostname = \"${FORCE_HOSTNAME}\"/g" /etc/influxdb.toml
-
 ENTRYPOINT ["/sbin/influxd", "--config", "/etc/influxdb.toml"]
