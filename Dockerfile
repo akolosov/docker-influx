@@ -2,11 +2,11 @@ FROM akolosov/busybox
 MAINTAINER Alexey Kolosov <alexey.kolosov@gmail.com>
 
 # Install InfluxDB
-ENV INFLUXDB_VERSION 0.9.4.2
+ENV INFLUXDB_VERSION 0.9.5.1
 ADD  https://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB_VERSION}_x86_64.tar.gz /tmp/influxdb.tar.gz
 RUN  cd /tmp && gunzip -dc influxdb.tar.gz | tar xvf - && \
-	cp influxdb_${INFLUXDB_VERSION}_x86_64/opt/influxdb/versions/${INFLUXDB_VERSION}/influx /bin/influx && \
-	cp influxdb_${INFLUXDB_VERSION}_x86_64/opt/influxdb/versions/${INFLUXDB_VERSION}/influxd /sbin/influxd && \
+	cp influxdb_${INFLUXDB_VERSION}_x86_64/usr/bin/influx /bin/influx && \
+	cp influxdb_${INFLUXDB_VERSION}_x86_64/usr/bin/influxd /sbin/influxd && \
 	rm -rf influxdb*
 
 EXPOSE 8083 8086 8088
